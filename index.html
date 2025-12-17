@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ContactHub - Smart Contact Manager</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="container navbar">
+      <div class="navbar-brand">
+        <div class="logo">
+          <i class="bi bi-person-badge"></i>
+        </div>
+        <div class="brand-text">
+          <h6>Contact<span style="color: #8b5cf6">Hub</span></h6>
+          <small>Smart Contact Manager</small>
+        </div>
+      </div>
+      <div class="navbar-actions">
+        <button class="btn-primary" onclick="openModal()">
+          <i class="bi bi-plus-lg"></i> Add Contact
+        </button>
+        <i
+          class="bi bi-bell"
+          style="font-size: 20px; color: #64748b; cursor: pointer"
+        ></i>
+        <i
+          class="bi bi-gear"
+          style="font-size: 20px; color: #64748b; cursor: pointer"
+        ></i>
+        <div
+          class="avatar"
+          style="background: linear-gradient(135deg, #6f42c1, #8b5cf6)"
+        ></div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon icon-blue">
+            <i class="bi bi-people"></i>
+          </div>
+          <div class="stat-info">
+            <small>TOTAL</small>
+            <h4 id="totalCount">0</h4>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-orange">
+            <i class="bi bi-star"></i>
+          </div>
+          <div class="stat-info">
+            <small>FAVORITES</small>
+            <h4 id="favoriteCount">0</h4>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon icon-red">
+            <i class="bi bi-heart-pulse"></i>
+          </div>
+          <div class="stat-info">
+            <small>EMERGENCY</small>
+            <h4 id="emergencyCount">0</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="main-grid">
+        <!-- Contacts Section -->
+        <div class="contacts-section">
+          <h4>All Contacts</h4>
+          <p>
+            Manage and organize your
+            <span id="contactCountText">0</span> contacts
+          </p>
+          <input
+            type="text"
+            class="search-box"
+            id="searchInput"
+            placeholder="Search by name, phone, or email..."
+          />
+          <div id="contactsList" class="contacts-list"></div>
+          <div id="emptyState" class="empty-state">
+            <i class="bi bi-person"></i>
+            <h6>No contacts found</h6>
+            <small>Click "Add Contact" to get started</small>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-header">
+              <div class="sidebar-icon icon-orange">
+                <i class="bi bi-star"></i>
+              </div>
+              <div>
+                <h6>Favorites</h6>
+                <small>Quick access to starred contacts</small>
+              </div>
+            </div>
+            <div class="sidebar-list" id="favoritesList">
+              <p style="text-align: center; color: #94a3b8; margin: 0">
+                No favorites yet
+              </p>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-header">
+              <div class="sidebar-icon icon-red">
+                <i class="bi bi-heart-pulse"></i>
+              </div>
+              <div>
+                <h6>Emergency</h6>
+                <small>Important contacts for urgent calls</small>
+              </div>
+            </div>
+            <div class="sidebar-list" id="emergencyList">
+              <p style="text-align: center; color: #94a3b8; margin: 0">
+                No emergency contacts
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="contactModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="modalTitle">Add New Contact</h5>
+          <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="avatar-section">
+            <div class="avatar-circle" id="avatarPreview">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <input
+              type="file"
+              id="photoInput"
+              accept="image/*"
+              style="display: none"
+            />
+            <small
+              onclick="document.getElementById('photoInput').click()"
+              style="cursor: pointer"
+            >
+              <i class="bi bi-camera"></i> Change Photo
+            </small>
+          </div>
+
+          <form id="contactForm">
+            <input type="hidden" id="contactId" />
+
+            <div class="form-group">
+              <label>Full Name <span class="required">*</span></label>
+              <input type="text" id="name" placeholder="Enter full name" />
+              <span class="error-message" id="nameError"></span>
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number <span class="required">*</span></label>
+              <input type="text" id="phone" placeholder="e.g., 01012345678" />
+              <span class="error-message" id="phoneError"></span>
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="email" placeholder="name@example.com" />
+              <span class="error-message" id="emailError"></span>
+            </div>
+
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" id="address" placeholder="Enter address" />
+            </div>
+
+            <div class="form-group">
+              <label>Group</label>
+              <select id="group">
+                <option value="">Select a group</option>
+                <option value="Work">Work</option>
+                <option value="Family">Family</option>
+                <option value="Friends">Friends</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Notes</label>
+              <textarea
+                id="notes"
+                placeholder="Add notes about this contact"
+              ></textarea>
+            </div>
+
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="favorite" />
+                <i class="bi bi-star" style="color: #f59e0b"></i> Favorite
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="emergency" />
+                <i class="bi bi-heart-pulse" style="color: #ef4444"></i>
+                Emergency
+              </label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+          <button class="btn-save" onclick="saveContact()">
+            <i class="bi bi-check-lg"></i> Save Contact
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>
